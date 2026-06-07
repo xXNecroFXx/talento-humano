@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: talento-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - JWT_SECRET=talento_humano_secret_2026
+      - NODE_ENV=production
+      - UPLOAD_PATH=./uploads
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/database.sqlite:/app/database.sqlite
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: talento-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  uploads:
